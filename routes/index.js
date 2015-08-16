@@ -3,6 +3,45 @@ var router = express.Router();
 var mongoapi = require('../mongo/api.js');
 var configDb = require('../config/database.js');
 
+
+///////////////////////////////////////////////////////////////////////////
+//////////////////////// TOKEN AUTHENTICATION ////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+
+router.use(function(req, res, next) {
+
+	var collection, 
+		db,
+		criteria,
+		options,
+		query,
+		AUTH_ERROR = { data: 'Authentication Error.', error: true };
+
+	// check if token is present	
+	if(!req.body.query.token) {
+		res.status(500).json(AUTH_ERROR);
+	} else {
+
+		db = mongoapi.getDatabase(configDb.auth.usersDb);
+
+		collection = mongoapi.getCollection(db, configDb.auth.tokensCollection);
+		query = {token: req.body.query.token};
+		criteria = {};
+		options = {};
+
+		mongoapi.findDocs(collection, query, criteria, options, function(err, data) {
+
+			if(err) {
+				res.status(500).json(AUTH_ERROR);
+			} else {
+				next();
+			}
+
+		});			
+	}	
+
+});
+
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////  GET /////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
@@ -17,7 +56,8 @@ router.get('/:db/:collection?/:id?', function(req, res, next) {
 		db,
 		query,
 		criteria,
-		options;
+		options,
+		GET_SUCCESS = {data: data, error: false};
 
 	db = mongoapi.getDatabase(req.params.db);
 
@@ -34,7 +74,7 @@ router.get('/:db/:collection?/:id?', function(req, res, next) {
 			if(err) {
 				next();
 			} else {
-				res.json({data: data, error: false});
+				res.json(GET_SUCCESS);
 			}
 
 		});	
@@ -52,7 +92,7 @@ router.get('/:db/:collection?/:id?', function(req, res, next) {
 			if(err) {
 				next();
 			} else {
-				res.json({data: data, error: false});
+				res.json(GET_SUCCESS);
 			}
 
 		});	
@@ -70,7 +110,7 @@ router.get('/:db/:collection?/:id?', function(req, res, next) {
 			if(err) {
 				next();
 			} else {
-				res.json({data: data, error: false});
+				res.json(GET_SUCCESS);
 			}
 
 		});	
@@ -98,7 +138,8 @@ router.delete('/:db/:collection?/:id?', function(req, res, next) {
 		db,
 		query,
 		criteria,
-		options;
+		options,
+		DELETE_SUCCESS = {data: 'Deleted successfully.', error: false};
 
 	db = mongoapi.getDatabase(req.params.db);
 
@@ -113,7 +154,7 @@ router.delete('/:db/:collection?/:id?', function(req, res, next) {
             if(err) {
                 next();
             } else {
-            	res.json({data: 'Deleted successfully.', error: false});
+            	res.json(DELETE_SUCCESS);
             }
         });	
 
@@ -128,7 +169,7 @@ router.delete('/:db/:collection?/:id?', function(req, res, next) {
             if(err) {
                 next();
             } else {
-            	res.json({data: 'Deleted successfully.', error: false});
+            	res.json(DELETE_SUCCESS);
             }
         });	
 
@@ -143,7 +184,7 @@ router.delete('/:db/:collection?/:id?', function(req, res, next) {
             if(err) {
                 next();
             } else {
-            	res.json({data: 'Deleted successfully.', error: false});
+            	res.json(DELETE_SUCCESS);
             }
         });	
 
@@ -155,7 +196,7 @@ router.delete('/:db/:collection?/:id?', function(req, res, next) {
             if(err) {
                 next();
             } else {
-            	res.json({data: 'Deleted successfully.', error: false});
+            	res.json(DELETE_SUCCESS);
             }
 		});
 	}
@@ -171,7 +212,8 @@ router.post('/:db/:collection?/:id?', function(req, res, next) {
 		query,
 		criteria,
 		postObj,
-		options;
+		options,
+		UPDATE_SUCCESS = {data: 'Updated successfully.', error: false};
 
 	db = mongoapi.getDatabase(req.params.db);
 
@@ -187,7 +229,7 @@ router.post('/:db/:collection?/:id?', function(req, res, next) {
             if(err) {
                 next();
             } else {
-            	res.json({data: 'Updated successfully.', error: false});
+            	res.json(UPDATE_SUCCESS);
             }
             
         });
@@ -204,7 +246,7 @@ router.post('/:db/:collection?/:id?', function(req, res, next) {
             if(err) {
                 next();
             } else {
-            	res.json({data: 'Updated successfully.', error: false});
+            	res.json(UPDATE_SUCCESS);
             }
             
         });
@@ -220,7 +262,7 @@ router.post('/:db/:collection?/:id?', function(req, res, next) {
             if(err) {
                 next();
             } else {
-            	res.json({data: 'Updated successfully.', error: false});
+            	res.json(UPDATE_SUCCESS);
             }
 
         });

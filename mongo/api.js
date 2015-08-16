@@ -51,8 +51,3 @@ mongoapi.removeDb = function (db, callback) {
 };
 
 module.exports = mongoapi;
-
-
-// POST /<db>/<collection> - Insert new document in collection (document in POST body)
-// PUT /<db>/<collection>/id - Update document with id (updated document in PUT body)
-// DELETE /<db>/<collection>/id - Delete document with id
