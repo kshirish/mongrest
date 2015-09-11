@@ -3,44 +3,47 @@ var router = express.Router();
 var mongoapi = require('../mongo/api.js');
 var configDb = require('../config/database.js');
 
+var isEmpty = function(obj) {
+	return !Object.keys(obj).length;
+};
 
 ///////////////////////////////////////////////////////////////////////////
 //////////////////////// TOKEN AUTHENTICATION ////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 
-router.use(function(req, res, next) {
+// router.use(function(req, res, next) {
 
-	var collection, 
-		db,
-		criteria,
-		options,
-		query,
-		AUTH_ERROR = { data: 'Authentication Error.', error: true };
+// 	var collection, 
+// 		db,
+// 		criteria,
+// 		options,
+// 		query,
+// 		AUTH_ERROR = { data: 'Authentication Error.', error: true };
 
-	// check if token is present	
-	if(!req.body.query.token) {
-		res.status(500).json(AUTH_ERROR);
-	} else {
+// 	// check if token is present	
+// 	if(!req.body.query.token) {
+// 		res.status(500).json(AUTH_ERROR);
+// 	} else {
 
-		db = mongoapi.getDatabase(configDb.auth.usersDb);
+// 		db = mongoapi.getDatabase(configDb.auth.usersDb);
 
-		collection = mongoapi.getCollection(db, configDb.auth.tokensCollection);
-		query = {token: req.body.query.token};
-		criteria = {};
-		options = {};
+// 		collection = mongoapi.getCollection(db, configDb.auth.tokensCollection);
+// 		query = {token: req.body.query.token};
+// 		criteria = {};
+// 		options = {};
 
-		mongoapi.findDocs(collection, query, criteria, options, function(err, data) {
+// 		mongoapi.findDocs(collection, query, criteria, options, function(err, data) {
 
-			if(err) {
-				res.status(500).json(AUTH_ERROR);
-			} else {
-				next();
-			}
+// 			if(err) {
+// 				res.status(500).json(AUTH_ERROR);
+// 			} else {
+// 				next();
+// 			}
 
-		});			
-	}	
+// 		});			
+// 	}	
 
-});
+// });
 
 ///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////  GET /////////////////////////////////
@@ -57,11 +60,11 @@ router.get('/:db/:collection?/:id?', function(req, res, next) {
 		query,
 		criteria,
 		options,
-		GET_SUCCESS = {data: data, error: false};
+		GET_SUCCESS = {error: false};
 
 	db = mongoapi.getDatabase(req.params.db);
 
-	if( req.params.db && req.params.collection && req.params.id ) {
+	if( req.params.collection && req.params.id ) {
 
 		// return doc according to id
 		collection = mongoapi.getCollection(db, req.params.collection);
@@ -74,16 +77,17 @@ router.get('/:db/:collection?/:id?', function(req, res, next) {
 			if(err) {
 				next();
 			} else {
+				GET_SUCCESS.data = data;
 				res.json(GET_SUCCESS);
 			}
 
 		});	
 
-	} else if( req.params.db && req.params.collection && req.body.query ) {
+	} else if( req.params.collection ) {
 
 		// return doc according to `query`
 		collection = mongoapi.getCollection(db, req.params.collection);
-		query = req.body.query;
+		query = isEmpty(req.query) ? {} : req.query;
 		criteria = {_id:0};
 		options = {limit: configDb.defaultLimit};
 
@@ -92,28 +96,12 @@ router.get('/:db/:collection?/:id?', function(req, res, next) {
 			if(err) {
 				next();
 			} else {
+				GET_SUCCESS.data = data;
 				res.json(GET_SUCCESS);
 			}
 
-		});	
+		});
 
-	} else if( req.params.db && req.params.collection ) {
-
-		// return all the docs in the collection
-		collection = mongoapi.getCollection(db, req.params.collection);
-		query = {};
-		criteria = {_id:0};
-		options = {limit: configDb.defaultLimit};
-
-		mongoapi.findDocs(collection, query, criteria, options, function(err, data) {
-
-			if(err) {
-				next();
-			} else {
-				res.json(GET_SUCCESS);
-			}
-
-		});	
 	} else {
 
 		// return collection names of the db
@@ -143,7 +131,7 @@ router.delete('/:db/:collection?/:id?', function(req, res, next) {
 
 	db = mongoapi.getDatabase(req.params.db);
 
-	if( req.params.db && req.params.collection && req.params.id ) {
+	if( req.params.collection && req.params.id ) {
 
 		// remove doc according to id
 		collection = mongoapi.getCollection(db, req.params.collection);
@@ -158,26 +146,11 @@ router.delete('/:db/:collection?/:id?', function(req, res, next) {
             }
         });	
 
-	} else if( req.params.db && req.params.collection && req.body.query ) {
+	} else if( req.params.collection ) {
 
 		// remove doc according to `query`
 		collection = mongoapi.getCollection(db, req.params.collection);
-		query = req.body.query;
-
-        mongoapi.removeDocs(collection, query, false, function (err) {
-
-            if(err) {
-                next();
-            } else {
-            	res.json(DELETE_SUCCESS);
-            }
-        });	
-
-	} else if( req.params.db && req.params.collection ) {
-
-		// remove all the docs in the collection
-		collection = mongoapi.getCollection(db, req.params.collection);
-		query = {};
+		query = isEmpty(req.body) ? {} : req.body;
 
         mongoapi.removeDocs(collection, query, false, function (err) {
 
@@ -200,6 +173,7 @@ router.delete('/:db/:collection?/:id?', function(req, res, next) {
             }
 		});
 	}
+
 });
 ///////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// POST /////////////////////////////////
@@ -217,12 +191,12 @@ router.post('/:db/:collection?/:id?', function(req, res, next) {
 
 	db = mongoapi.getDatabase(req.params.db);
 
-	if( req.params.db && req.params.collection && req.params.id ) {
+	if( req.params.collection && req.params.id ) {
 
 		// update doc according to id
 		collection = mongoapi.getCollection(db, req.params.collection);
 		query = {_id: mongoapi.getUniqueIdObject(req.params.id)};
-		postObj = req.body.post;
+		postObj = isEmpty(req.body) ? {} : req.body;
 
 		mongoapi.updateDocs(collection, query, postObj, function (err) {
 
@@ -234,12 +208,12 @@ router.post('/:db/:collection?/:id?', function(req, res, next) {
             
         });
 
-	} else if( req.params.db && req.params.collection && req.body.query ) {
+	} else if( req.params.collection ) {
 
 		// update doc according to `query`
 		collection = mongoapi.getCollection(db, req.params.collection);
-		query = req.body.query;
-		postObj = req.body.post;
+		query = isEmpty(req.query) ? {} : req.query;
+		postObj = isEmpty(req.body) ? {} : req.body;
 
 		mongoapi.updateDocs(collection, query, postObj, function (err) {
 
@@ -251,21 +225,6 @@ router.post('/:db/:collection?/:id?', function(req, res, next) {
             
         });
 
-	} else if( req.params.db && req.params.collection ) {
-
-		// add doc in the collection
-		collection = mongoapi.getCollection(db, req.params.collection);
-		postObj = req.body.post;
-
-		mongoapi.addDocs(collection, postObj, function (err) {
-
-            if(err) {
-                next();
-            } else {
-            	res.json(UPDATE_SUCCESS);
-            }
-
-        });
 	}
 });
 
