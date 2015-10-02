@@ -1,15 +1,15 @@
-var express = require('express');
-var logger = require('morgan');
-var session = require('express-session');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var routes = require('./routes/index');
-var auth = require('./routes/authentication');
-var configDb = require('./config/database.js');
+let express = require('express');
+let logger = require('morgan');
+let session = require('express-session');
+let cookieParser = require('cookie-parser');
+let bodyParser = require('body-parser');
+let routes = require('./routes/index');
+let auth = require('./routes/authentication');
+const configDb = require('./config/database.js');
 
-var port = 3000;
-var restBaseUrl = '/' + (configDb.urlPrefix || '');
-var app = express();
+const port = 3000;
+const restBaseUrl = '/' + (configDb.urlPrefix || '');
+let app = express();
 
 // middlewares
 app.use(logger('dev'));
@@ -23,16 +23,17 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(restBaseUrl, routes);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+app.use((req, res, next) => {
+    let err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
 // error handlers
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500).json({ data: 'Some error occurred.', error: true });
+app.use((err, req, res, next) => {
+    res.status(err.status || 500).json({ data: 'Some error occurred.', error: true });
 });
 
 // listenting to port
 app.listen(port);
+console.log('listenting to port: ' + port);

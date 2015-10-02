@@ -1,53 +1,36 @@
-var mongojs = require('mongojs');
-var ObjectId = mongojs.ObjectId;
-var mongoapi = {};
+let mongojs = require('mongojs');
+const ObjectId = mongojs.ObjectId;
 
-mongoapi.getDatabase = function (dbname) {
-    return mongojs(dbname);
+module.exports = {
+    getDatabase : dbname => mongojs(dbname),
+
+    getCollection : (db, collectionname) => db.collection(collectionname),
+
+    getCollectionNames : (db, callback) => db.getCollectionNames(callback),
+
+    getUniqueIdString : () => (new ObjectId()).toString(),	// avoid ObjectId
+
+    getUniqueIdObject : id => ObjectId(id),
+
+    addDocs : (collection, docs, callback) => {
+
+        docs._id = this.getUniqueIdString();
+        collection.insert(docs, callback);
+    },
+
+    updateDocs : (collection, query, update, options, callback) => {
+
+    	let updateObj = {
+    		$inc: update.inc || {},
+    		$set: update.set || {}
+    	};
+
+        collection.update(query, updateObj, options, callback);
+    },
+
+    findDocs : (collection, query, criteria, options, callback) => collection.find(query, criteria, options, callback),
+
+    removeDocs : (collection, query, justOne, callback) => collection.remove( query, justOne, callback ),
+
+    removeDb : (db, callback) => db.dropDatabase( callback )
 };
-
-mongoapi.getCollection = function (db, collectionname) {
-    return  db.collection(collectionname);
-};
-
-mongoapi.getCollectionNames = function(db, callback) {
-	db.getCollectionNames(callback);
-};
-
-mongoapi.getUniqueIdString = function() {
-    return (new ObjectId()).toString();	// avoid ObjectId
-};
-
-mongoapi.getUniqueIdObject = function(id) {
-    return ObjectId(id);
-};
-
-mongoapi.addDocs = function (collection, docs, callback) {
-
-    docs._id = this.getUniqueIdString();
-    collection.insert(docs, callback);
-};
-
-mongoapi.updateDocs = function (collection, query, update, options, callback) {
-
-	var updateObj = {
-		$inc: update.inc || {},
-		$set: update.set || {}
-	};
-
-    collection.update(query, updateObj, options, callback);
-};
-
-mongoapi.findDocs = function (collection, query, criteria, options, callback) {   
-    collection.find(query, criteria, options, callback);
-};
-
-mongoapi.removeDocs = function (collection, query, justOne, callback) {
-    collection.remove( query, justOne, callback );
-};
-
-mongoapi.removeDb = function (db, callback) {
-    db.dropDatabase( callback );
-};
-
-module.exports = mongoapi;
