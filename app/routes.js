@@ -1,4 +1,4 @@
-const Model = require('./models/model');
+const MyModel = require('./models/model');
 
 module.exports = (router) => {
 
@@ -6,7 +6,7 @@ module.exports = (router) => {
 
 		// capitalize model name
 		const name = req.body.modelName.substring(0, 1).toUpperCase() + req.body.modelName.substring(1);
-		const model = new Model({
+		const model = new MyModel({
 			name,
 			columns: req.body.columns
 		});
@@ -20,6 +20,7 @@ module.exports = (router) => {
 
 	router.get('*', (req, res) => {
 		
+		console.log(req.url);
 		res.json({method: 'GET', message: 'Still in progress!'});
 	});
 
