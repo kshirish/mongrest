@@ -1,17 +1,23 @@
 {
   "name": "mongrest",
-  "version": "0.0.0",
-  "private": true,
+  "version": "1.0.0",
+  "description": "An application that creates models and queries the database based on restful urls",
+  "main": "server.js",
   "scripts": {
-    "start": "node app.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+    "REST",
+    "mongoDB"
+  ],
+  "author": "kshirish <kisleyshirish25@gmail.com>",
+  "license": "MIT",
   "dependencies": {
-    "body-parser": "~1.13.2",
-    "cookie-parser": "~1.3.5",
-    "debug": "~2.2.0",
-    "express": "~4.13.1",
-    "express-session": "^1.11.3",
-    "mongojs": "^1.3.0",
-    "morgan": "~1.6.1"
+    "body-parser": "^1.15.2",
+    "ejs": "^2.4.2",
+    "express": "^4.14.0",
+    "method-override": "^2.3.6",
+    "mongoose": "^4.5.2",
+    "morgan": "^1.7.0"
   }
 }

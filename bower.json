@@ -1,0 +1,28 @@
+{
+  "name": "mongrest",
+  "description": "An application that creates models and queries the database based on restful urls",
+  "main": "server.js",
+  "authors": [
+    "kshirish <kisleyshirish25@gmail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "REST",
+    "mongoDB"
+  ],
+  "moduleType": [],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "font-awesome": "^4.6.3"
+  }
+}
