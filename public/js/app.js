@@ -52,7 +52,7 @@
 			$.ajax({			
 
 				type: 'POST',
-				url: '/api/create',
+				url: '/api/v1/model',
 				contentType: 'application/json; charset=utf-8',
 				data: JSON.stringify(data),
 				dataType: 'json'			

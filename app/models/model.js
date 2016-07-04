@@ -14,4 +14,4 @@ const schema = new mongoose.Schema({
 	}]
 });
 
-module.exports = mongoose.model('MyModel', schema);
+module.exports = mongoose.model('CustomModel', schema);

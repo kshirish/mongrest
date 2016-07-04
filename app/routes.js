@@ -1,12 +1,12 @@
-const MyModel = require('./models/model');
+const CustomModal = require('./models/model');
 
 module.exports = (router) => {
 
-	router.post('/create', (req, res) => {
+	router.post('/model', (req, res) => {
 
 		// capitalize model name
 		const name = req.body.modelName.substring(0, 1).toUpperCase() + req.body.modelName.substring(1);
-		const model = new MyModel({
+		const model = new CustomModal({
 			name,
 			columns: req.body.columns
 		});

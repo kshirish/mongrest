@@ -43,7 +43,7 @@ app.get('/', (req, res) => {
 });
 
 // route's namespace
-app.use('/api', router);
+app.use('/api/v1', router);
 
 // passing on router to routes
 require('./app/routes')(router);
