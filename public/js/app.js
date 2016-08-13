@@ -25,7 +25,7 @@
 			
 			var arr = [];
 			var data;
-			var modelName = $form.find('input[type="text"]').eq(0).val();
+			var name = $form.find('input[type="text"]').eq(0).val();
 
 			$.each($(this).find('.form-row'), function(index, el) {
 
@@ -45,7 +45,7 @@
 			});
 
 			data = {
-				modelName: modelName,
+				name: name,
 				columns: arr
 			};
 

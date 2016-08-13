@@ -6,9 +6,6 @@ const methodOverride = require('method-override');
 const morgan = require('morgan');
 const connect = require('./database/connect');
 
-// mongoose columns types
-const types = ['String', 'Number', 'Date', 'Buffer', 'Boolean', 'Mixed', 'Objectid', 'Array']
-
 // config 
 const {url} = require('./config');
 
@@ -38,19 +35,17 @@ app.set('views', './public/views');
 app.set('view engine', 'ejs');
 
 // index page
-app.get('/', (req, res) => {
-	res.render('index.ejs', {types});
-});
+require('./routes/index')(app);
 
 // route's namespace
 app.use('/api/v1', router);
 
 // passing on router to routes
-require('./app/routes')(router);
+require('./routes/routes')(router);
 
 // catch all
 app.get('*', (req, res) => {
-	res.render('index.ejs', {types});
+	res.redirect('/');
 });
 
 // listen to a port
