@@ -1,8 +1,8 @@
 {
   "name": "mrest",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "HTTP interface for mongodb.",
-  "main": "server.js",
+  "main": "./lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,7 +15,6 @@
   "bin": {
     "mrest": "./bin/mrest"
   },
-  "main" : "./lib/index.js",
   "author": "kshirish <kisleyshirish25@gmail.com>",
   "license": "MIT",
   "dependencies": {
