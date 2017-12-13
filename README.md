@@ -1,5 +1,4 @@
-# Mongrest [![travis][travis-image]][travis-url] [![npm][npm-image]][npm-url] [![downloads][downloads-image]][downloads-url] [![javascript style guide][standard-image]][standard-url]
-
+# Mongrest 
 _**Mongrest**_ provides an HTTP interface for your mongodb.
 
 ## How to use
