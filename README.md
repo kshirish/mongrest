@@ -10,7 +10,7 @@ _**Mongrest**_ provides an HTTP interface for your mongodb.
 ### CRUD
 * GET /users - Retrieves a list of users
 * GET /users/12 - Retrieves a user with #12
-* POST /users - Creates a new ticket
+* POST /users/add - Creates a new user
 * PUT /users/12 - Updates user #12
 * DELETE /users/12 - Deletes user #12
 
@@ -32,5 +32,9 @@ _**Mongrest**_ provides an HTTP interface for your mongodb.
 ### Misc
 * GET /stats - stats for the current database
 * GET /list - lists collections in the current database
-* POST /collection/test - create a new collection 'test'
+* POST /test/new - create a new collection 'test'
 * DELETE /test - delete 'test' collection
+
+### Query to mongo
+* POST /users/filter
+  ```name=john&age>21&fields=name,age&sort=name,-age&offset=10&limit=10```
