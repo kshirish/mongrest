@@ -1,23 +1,30 @@
 {
-  "name": "mongrest",
-  "version": "1.0.0",
-  "description": "An application that creates models and queries the database based on restful urls",
+  "name": "mrest",
+  "version": "2.3.0",
+  "description": "HTTP interface for mongodb.",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "REST",
+    "Rest",
+    "HTTP",
     "mongoDB"
   ],
+  "preferGlobal": true,
+  "bin": {
+    "mrest": "./bin/mrest"
+  },
+  "main" : "./lib/index.js",
   "author": "kshirish <kisleyshirish25@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.15.2",
-    "ejs": "^2.4.2",
     "express": "^4.14.0",
     "method-override": "^2.3.6",
-    "mongoose": "^4.5.2",
-    "morgan": "^1.7.0"
+    "mongojs": "^2.4.1",
+    "morgan": "^1.7.0",
+    "query-to-mongo": "^0.7.0",
+    "yargs": "^10.0.3"
   }
 }

@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+
+const { port, url } = require('yargs').argv
+
+if(!url) {
+	
+	console.error('Please provide a database url.');
+	return;
+}
+
+require('../lib/index')({ port, url });
+	

@@ -1,4 +1,0 @@
-{
-	"url": "mongodb://localhost/mongrest",
-	"schemaTypes": ["String", "Number", "Date", "Buffer", "Boolean", "Mixed", "ObjectId", "Array", "ArrayOfString", "ArrayOfNumber", "ArrayOfDate", "ArrayOfBuffer", "ArrayOfBoolean", "ArrayOfMixed", "ArrayOfObjectId"]
-}
